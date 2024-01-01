@@ -7,7 +7,7 @@
       "request": "launch",
       "module": "smart_contracts",
       "cwd": "${workspaceFolder}",
-      "preLaunchTask": "Start AlgoKit LocalNet",
+      // "preLaunchTask": "Start AlgoKit LocalNet",
       "envFile": "${workspaceFolder}/.env.localnet"
     },
     {

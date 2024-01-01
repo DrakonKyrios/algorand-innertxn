@@ -14,16 +14,24 @@ def deploy(
     app_spec: algokit_utils.ApplicationSpecification,
     deployer: algokit_utils.Account,
 ) -> None:
-    from smart_contracts.artifacts.warehouse.client import (
-        WarehouseClient,
+    from smart_contracts.artifacts.broker.client import (
+        BrokerClient,
     )
 
-    app_client = WarehouseClient(
+    app_client = BrokerClient(
         algod_client,
         creator=deployer,
         indexer_client=indexer_client,
     )
     app_client.deploy(
-        on_schema_break=algokit_utils.OnSchemaBreak.ReplaceApp,
-        on_update=algokit_utils.OnUpdate.ReplaceApp,
+        on_schema_break=algokit_utils.OnSchemaBreak.AppendApp,
+        on_update=algokit_utils.OnUpdate.AppendApp,
+        delete_args=algokit_utils.DeployCallArgs(),
+    )
+
+    name = "world"
+    response = app_client.hello(name=name)
+    logger.info(
+        f"Called hello on {app_spec.contract.name} ({app_client.app_id}) "
+        f"with name={name}, received: {response.return_value}"
     )

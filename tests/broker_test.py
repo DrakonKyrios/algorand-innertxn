@@ -6,32 +6,33 @@ from algokit_utils.config import config
 from algosdk.v2client.algod import AlgodClient
 from algosdk.v2client.indexer import IndexerClient
 
-from smart_contracts.artifacts.warehouse.client import WarehouseClient
+from smart_contracts.artifacts.broker.client import BrokerClient
 
 
 @pytest.fixture(scope="session")
-def warehouse_client(
+def broker_client(
     algod_client: AlgodClient, indexer_client: IndexerClient
-) -> WarehouseClient:
+) -> BrokerClient:
     config.configure(
         debug=True,
         # trace_all=True,
     )
 
-    client = WarehouseClient(
+    client = BrokerClient(
         algod_client,
         creator=get_localnet_default_account(algod_client),
         indexer_client=indexer_client,
     )
 
     client.deploy(
-        on_schema_break=algokit_utils.OnSchemaBreak.ReplaceApp,
-        on_update=algokit_utils.OnUpdate.UpdateApp,
+        on_schema_break=algokit_utils.OnSchemaBreak.AppendApp,
+        on_update=algokit_utils.OnUpdate.AppendApp,
+        delete_args=algokit_utils.DeployCallArgs(),
     )
     return client
 
 
-def test_says_hello(warehouse_client: WarehouseClient) -> None:
-    result = warehouse_client.hello(name="World")
+def test_says_hello(broker_client: BrokerClient) -> None:
+    result = broker_client.hello(name="World")
 
     assert result.return_value == "Hello, World"
