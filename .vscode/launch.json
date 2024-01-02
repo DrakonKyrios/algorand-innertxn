@@ -25,7 +25,8 @@
       "request": "launch",
       "module": "smart_contracts",
       "args": ["build"],
-      "cwd": "${workspaceFolder}"
+      "cwd": "${workspaceFolder}",
+      "console": "internalConsole"
     },
     {
       "type": "avm",

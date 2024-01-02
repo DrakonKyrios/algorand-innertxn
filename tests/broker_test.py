@@ -28,6 +28,7 @@ def broker_client(
         on_schema_break=algokit_utils.OnSchemaBreak.AppendApp,
         on_update=algokit_utils.OnUpdate.AppendApp,
         delete_args=algokit_utils.DeployCallArgs(),
+        update_args=algokit_utils.DeployCallArgs(),
     )
     return client
 

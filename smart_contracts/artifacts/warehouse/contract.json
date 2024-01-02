@@ -2,6 +2,20 @@
     "name": "warehouse",
     "methods": [
         {
+            "name": "create",
+            "args": [],
+            "returns": {
+                "type": "void"
+            }
+        },
+        {
+            "name": "opt_in",
+            "args": [],
+            "returns": {
+                "type": "void"
+            }
+        },
+        {
             "name": "hello",
             "args": [
                 {
@@ -17,12 +31,31 @@
             "name": "transfer",
             "args": [
                 {
-                    "type": "string",
-                    "name": "name"
+                    "type": "uint64",
+                    "name": "value"
                 }
             ],
             "returns": {
                 "type": "string"
+            }
+        },
+        {
+            "name": "deposit",
+            "args": [
+                {
+                    "type": "uint64",
+                    "name": "value"
+                }
+            ],
+            "returns": {
+                "type": "string"
+            }
+        },
+        {
+            "name": "test",
+            "args": [],
+            "returns": {
+                "type": "uint64"
             }
         }
     ],

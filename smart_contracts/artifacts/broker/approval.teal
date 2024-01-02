@@ -4,32 +4,24 @@ bytecblock 0x 0x48656c6c6f2c20 0x151f7c75
 txn NumAppArgs
 intc_0 // 0
 ==
-bnz main_l8
+bnz main_l10
+txna ApplicationArgs 0
+pushbytes 0xa0e81872 // "update()void"
+==
+bnz main_l9
 txna ApplicationArgs 0
 pushbytes 0x24378d3c // "delete()void"
 ==
-bnz main_l7
+bnz main_l8
 txna ApplicationArgs 0
 pushbytes 0x02bece11 // "hello(string)string"
 ==
-bnz main_l6
+bnz main_l7
 txna ApplicationArgs 0
 pushbytes 0xaafab102 // "trade(string)string"
 ==
-bnz main_l5
+bnz main_l6
 err
-main_l5:
-txn OnCompletion
-intc_0 // NoOp
-==
-txn ApplicationID
-intc_0 // 0
-!=
-&&
-assert
-callsub tradecaster_5
-intc_1 // 1
-return
 main_l6:
 txn OnCompletion
 intc_0 // NoOp
@@ -39,10 +31,22 @@ intc_0 // 0
 !=
 &&
 assert
-callsub hellocaster_4
+callsub tradecaster_7
 intc_1 // 1
 return
 main_l7:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub hellocaster_6
+intc_1 // 1
+return
+main_l8:
 txn OnCompletion
 pushint 5 // DeleteApplication
 ==
@@ -51,16 +55,28 @@ intc_0 // 0
 !=
 &&
 assert
-callsub deletecaster_3
+callsub deletecaster_5
 intc_1 // 1
 return
-main_l8:
+main_l9:
+txn OnCompletion
+pushint 4 // UpdateApplication
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub updatecaster_4
+intc_1 // 1
+return
+main_l10:
 txn OnCompletion
 intc_0 // NoOp
 ==
-bnz main_l10
+bnz main_l12
 err
-main_l10:
+main_l12:
 txn ApplicationID
 intc_0 // 0
 ==
@@ -68,14 +84,20 @@ assert
 intc_1 // 1
 return
 
+// update
+update_0:
+proto 0 0
+intc_1 // 1
+return
+
 // delete
-delete_0:
+delete_1:
 proto 0 0
 intc_1 // 1
 return
 
 // hello
-hello_1:
+hello_2:
 proto 1 1
 bytec_0 // ""
 bytec_1 // "Hello, "
@@ -93,7 +115,7 @@ frame_bury 0
 retsub
 
 // trade
-trade_2:
+trade_3:
 proto 1 1
 bytec_0 // ""
 bytec_1 // "Hello, "
@@ -110,21 +132,27 @@ concat
 frame_bury 0
 retsub
 
-// delete_caster
-deletecaster_3:
+// update_caster
+updatecaster_4:
 proto 0 0
-callsub delete_0
+callsub update_0
+retsub
+
+// delete_caster
+deletecaster_5:
+proto 0 0
+callsub delete_1
 retsub
 
 // hello_caster
-hellocaster_4:
+hellocaster_6:
 proto 0 0
 bytec_0 // ""
 dup
 txna ApplicationArgs 1
 frame_bury 1
 frame_dig 1
-callsub hello_1
+callsub hello_2
 frame_bury 0
 bytec_2 // 0x151f7c75
 frame_dig 0
@@ -133,14 +161,14 @@ log
 retsub
 
 // trade_caster
-tradecaster_5:
+tradecaster_7:
 proto 0 0
 bytec_0 // ""
 dup
 txna ApplicationArgs 1
 frame_bury 1
 frame_dig 1
-callsub trade_2
+callsub trade_3
 frame_bury 0
 bytec_2 // 0x151f7c75
 frame_dig 0
