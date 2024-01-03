@@ -31,7 +31,7 @@ app = Application("warehouse", state=WarehouseState())
 
 @app.create
 def create() -> Expr:
-    return Seq(app.state.shared_stock.set(Int(10)), Approve())
+    return Seq(app.state.shared_stock.set(Int(100)), Approve())
 
 
 @app.opt_in
@@ -40,23 +40,19 @@ def opt_in() -> Expr:
 
 
 @app.external
-def hello(name: abi.String, *, output: abi.String) -> Expr:
-    return output.set(Concat(Bytes("Hello, "), name.get()))
-
-
-@app.external
-def transfer(value: abi.Uint64, *, output: abi.String) -> Expr:
+def hold(value: abi.Uint64, *, output: abi.String) -> Expr:
     return Seq(
-        app.state.shared_stock.set(value.get()),
+        app.state.local_stock.set(app.state.local_stock.get() - value.get()),
+        app.state.shared_stock.set(app.state.shared_stock.get() + value.get()),
         output.set(Bytes("Done")),
     )
 
 
 @app.external
-def deposit(value: abi.Uint64, *, output: abi.String) -> Expr:
+def transfer(value: abi.Uint64, *, output: abi.String) -> Expr:
     return Seq(
-        app.state.local_stock.set(app.state.local_stock.get() - value.get()),
-        app.state.shared_stock.set(value.get()),
+        app.state.local_stock.set(app.state.local_stock.get() + value.get()),
+        app.state.shared_stock.set(app.state.shared_stock.get() - value.get()),
         output.set(Bytes("Done")),
     )
 

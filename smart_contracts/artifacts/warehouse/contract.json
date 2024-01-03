@@ -16,19 +16,7 @@
             }
         },
         {
-            "name": "hello",
-            "args": [
-                {
-                    "type": "string",
-                    "name": "name"
-                }
-            ],
-            "returns": {
-                "type": "string"
-            }
-        },
-        {
-            "name": "transfer",
+            "name": "hold",
             "args": [
                 {
                     "type": "uint64",
@@ -40,7 +28,7 @@
             }
         },
         {
-            "name": "deposit",
+            "name": "transfer",
             "args": [
                 {
                     "type": "uint64",

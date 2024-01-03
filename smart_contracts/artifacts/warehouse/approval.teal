@@ -1,31 +1,39 @@
 #pragma version 8
-intcblock 0 1 10
-bytecblock 0x 0x151f7c75 0x7368617265645f73746f636b 0x6c6f63616c5f73746f636b 0x446f6e65
+intcblock 0 1
+bytecblock 0x 0x7368617265645f73746f636b 0x6c6f63616c5f73746f636b 0x151f7c75 0x446f6e65
 txna ApplicationArgs 0
 pushbytes 0x4c5c61ba // "create()void"
 ==
-bnz main_l12
+bnz main_l10
 txna ApplicationArgs 0
 pushbytes 0x30c6d58a // "opt_in()void"
 ==
-bnz main_l11
-txna ApplicationArgs 0
-pushbytes 0x02bece11 // "hello(string)string"
-==
-bnz main_l10
-txna ApplicationArgs 0
-pushbytes 0x7c24c574 // "transfer(uint64)string"
-==
 bnz main_l9
 txna ApplicationArgs 0
-pushbytes 0x64fe47c2 // "deposit(uint64)string"
+pushbytes 0x2770593c // "hold(uint64)string"
 ==
 bnz main_l8
 txna ApplicationArgs 0
-pushbytes 0xffbc3914 // "test()uint64"
+pushbytes 0x7c24c574 // "transfer(uint64)string"
 ==
 bnz main_l7
+txna ApplicationArgs 0
+pushbytes 0xffbc3914 // "test()uint64"
+==
+bnz main_l6
 err
+main_l6:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub testcaster_9
+intc_1 // 1
+return
 main_l7:
 txn OnCompletion
 intc_0 // NoOp
@@ -35,7 +43,7 @@ intc_0 // 0
 !=
 &&
 assert
-callsub testcaster_11
+callsub transfercaster_8
 intc_1 // 1
 return
 main_l8:
@@ -47,34 +55,10 @@ intc_0 // 0
 !=
 &&
 assert
-callsub depositcaster_10
+callsub holdcaster_7
 intc_1 // 1
 return
 main_l9:
-txn OnCompletion
-intc_0 // NoOp
-==
-txn ApplicationID
-intc_0 // 0
-!=
-&&
-assert
-callsub transfercaster_9
-intc_1 // 1
-return
-main_l10:
-txn OnCompletion
-intc_0 // NoOp
-==
-txn ApplicationID
-intc_0 // 0
-!=
-&&
-assert
-callsub hellocaster_8
-intc_1 // 1
-return
-main_l11:
 txn OnCompletion
 intc_1 // OptIn
 ==
@@ -83,10 +67,10 @@ intc_0 // 0
 !=
 &&
 assert
-callsub optincaster_7
+callsub optincaster_6
 intc_1 // 1
 return
-main_l12:
+main_l10:
 txn OnCompletion
 intc_0 // NoOp
 ==
@@ -95,15 +79,15 @@ intc_0 // 0
 ==
 &&
 assert
-callsub createcaster_6
+callsub createcaster_5
 intc_1 // 1
 return
 
 // create
 create_0:
 proto 0 0
-bytec_2 // "shared_stock"
-intc_2 // 10
+bytec_1 // "shared_stock"
+pushint 100 // 100
 app_global_put
 intc_1 // 1
 return
@@ -112,20 +96,31 @@ return
 optin_1:
 proto 0 0
 txn Sender
-bytec_3 // "local_stock"
+bytec_2 // "local_stock"
 pushint 1000 // 1000
 app_local_put
 intc_1 // 1
 return
 
-// hello
-hello_2:
+// hold
+hold_2:
 proto 1 1
 bytec_0 // ""
-pushbytes 0x48656c6c6f2c20 // "Hello, "
+txn Sender
+bytec_2 // "local_stock"
+txn Sender
+bytec_2 // "local_stock"
+app_local_get
 frame_dig -1
-extract 2 0
-concat
+-
+app_local_put
+bytec_1 // "shared_stock"
+bytec_1 // "shared_stock"
+app_global_get
+frame_dig -1
++
+app_global_put
+bytec 4 // "Done"
 frame_bury 0
 frame_dig 0
 len
@@ -140,34 +135,19 @@ retsub
 transfer_3:
 proto 1 1
 bytec_0 // ""
-bytec_2 // "shared_stock"
-frame_dig -1
-app_global_put
-bytec 4 // "Done"
-frame_bury 0
-frame_dig 0
-len
-itob
-extract 6 0
-frame_dig 0
-concat
-frame_bury 0
-retsub
-
-// deposit
-deposit_4:
-proto 1 1
-bytec_0 // ""
 txn Sender
-bytec_3 // "local_stock"
+bytec_2 // "local_stock"
 txn Sender
-bytec_3 // "local_stock"
+bytec_2 // "local_stock"
 app_local_get
 frame_dig -1
--
++
 app_local_put
-bytec_2 // "shared_stock"
+bytec_1 // "shared_stock"
+bytec_1 // "shared_stock"
+app_global_get
 frame_dig -1
+-
 app_global_put
 bytec 4 // "Done"
 frame_bury 0
@@ -181,7 +161,7 @@ frame_bury 0
 retsub
 
 // test
-test_5:
+test_4:
 proto 0 1
 intc_0 // 0
 bytec_0 // ""
@@ -191,7 +171,7 @@ bytec_0 // ""
 dup
 intc_0 // 0
 dupn 2
-intc_2 // 10
+pushint 10 // 10
 frame_bury 3
 intc_1 // 1
 frame_bury 8
@@ -219,35 +199,36 @@ frame_bury 0
 retsub
 
 // create_caster
-createcaster_6:
+createcaster_5:
 proto 0 0
 callsub create_0
 retsub
 
 // opt_in_caster
-optincaster_7:
+optincaster_6:
 proto 0 0
 callsub optin_1
 retsub
 
-// hello_caster
-hellocaster_8:
+// hold_caster
+holdcaster_7:
 proto 0 0
 bytec_0 // ""
-dup
+intc_0 // 0
 txna ApplicationArgs 1
+btoi
 frame_bury 1
 frame_dig 1
-callsub hello_2
+callsub hold_2
 frame_bury 0
-bytec_1 // 0x151f7c75
+bytec_3 // 0x151f7c75
 frame_dig 0
 concat
 log
 retsub
 
 // transfer_caster
-transfercaster_9:
+transfercaster_8:
 proto 0 0
 bytec_0 // ""
 intc_0 // 0
@@ -257,36 +238,19 @@ frame_bury 1
 frame_dig 1
 callsub transfer_3
 frame_bury 0
-bytec_1 // 0x151f7c75
-frame_dig 0
-concat
-log
-retsub
-
-// deposit_caster
-depositcaster_10:
-proto 0 0
-bytec_0 // ""
-intc_0 // 0
-txna ApplicationArgs 1
-btoi
-frame_bury 1
-frame_dig 1
-callsub deposit_4
-frame_bury 0
-bytec_1 // 0x151f7c75
+bytec_3 // 0x151f7c75
 frame_dig 0
 concat
 log
 retsub
 
 // test_caster
-testcaster_11:
+testcaster_9:
 proto 0 0
 intc_0 // 0
-callsub test_5
+callsub test_4
 frame_bury 0
-bytec_1 // 0x151f7c75
+bytec_3 // 0x151f7c75
 frame_dig 0
 itob
 concat
