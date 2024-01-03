@@ -1,177 +1,240 @@
 #pragma version 8
-intcblock 0 1
-bytecblock 0x 0x48656c6c6f2c20 0x151f7c75
-txn NumAppArgs
-intc_0 // 0
-==
-bnz main_l10
+intcblock 1 0 6
+bytecblock 0x 0x77617265686f7573655f6964 0x616d6f756e74 0x151f7c75
 txna ApplicationArgs 0
 pushbytes 0xa0e81872 // "update()void"
 ==
-bnz main_l9
+bnz main_l12
 txna ApplicationArgs 0
 pushbytes 0x24378d3c // "delete()void"
 ==
+bnz main_l11
+txna ApplicationArgs 0
+pushbytes 0x3fd29f9a // "start_trade(uint64,uint64)string"
+==
+bnz main_l10
+txna ApplicationArgs 0
+pushbytes 0xf19c9651 // "complete_trade(uint64,uint64)string"
+==
+bnz main_l9
+txna ApplicationArgs 0
+pushbytes 0x4c5c61ba // "create()void"
+==
 bnz main_l8
 txna ApplicationArgs 0
-pushbytes 0x02bece11 // "hello(string)string"
+pushbytes 0x30c6d58a // "opt_in()void"
 ==
 bnz main_l7
-txna ApplicationArgs 0
-pushbytes 0xaafab102 // "trade(string)string"
-==
-bnz main_l6
 err
-main_l6:
-txn OnCompletion
-intc_0 // NoOp
-==
-txn ApplicationID
-intc_0 // 0
-!=
-&&
-assert
-callsub tradecaster_7
-intc_1 // 1
-return
 main_l7:
 txn OnCompletion
-intc_0 // NoOp
+intc_0 // OptIn
 ==
 txn ApplicationID
-intc_0 // 0
+intc_1 // 0
 !=
 &&
 assert
-callsub hellocaster_6
-intc_1 // 1
+callsub optincaster_11
+intc_0 // 1
 return
 main_l8:
+txn OnCompletion
+intc_1 // NoOp
+==
+txn ApplicationID
+intc_1 // 0
+==
+&&
+assert
+callsub createcaster_10
+intc_0 // 1
+return
+main_l9:
+txn OnCompletion
+intc_1 // NoOp
+==
+txn ApplicationID
+intc_1 // 0
+!=
+&&
+assert
+callsub completetradecaster_9
+intc_0 // 1
+return
+main_l10:
+txn OnCompletion
+intc_1 // NoOp
+==
+txn ApplicationID
+intc_1 // 0
+!=
+&&
+assert
+callsub starttradecaster_8
+intc_0 // 1
+return
+main_l11:
 txn OnCompletion
 pushint 5 // DeleteApplication
 ==
 txn ApplicationID
-intc_0 // 0
+intc_1 // 0
 !=
 &&
 assert
-callsub deletecaster_5
-intc_1 // 1
+callsub deletecaster_7
+intc_0 // 1
 return
-main_l9:
+main_l12:
 txn OnCompletion
 pushint 4 // UpdateApplication
 ==
 txn ApplicationID
-intc_0 // 0
+intc_1 // 0
 !=
 &&
 assert
-callsub updatecaster_4
-intc_1 // 1
-return
-main_l10:
-txn OnCompletion
-intc_0 // NoOp
-==
-bnz main_l12
-err
-main_l12:
-txn ApplicationID
-intc_0 // 0
-==
-assert
-intc_1 // 1
+callsub updatecaster_6
+intc_0 // 1
 return
 
 // update
 update_0:
 proto 0 0
-intc_1 // 1
+intc_0 // 1
 return
 
 // delete
 delete_1:
 proto 0 0
-intc_1 // 1
+intc_0 // 1
 return
 
-// hello
-hello_2:
-proto 1 1
+// start_trade
+starttrade_2:
+proto 2 1
 bytec_0 // ""
-bytec_1 // "Hello, "
+bytec_1 // "warehouse_id"
+frame_dig -2
+app_global_put
+txn Sender
+bytec_2 // "amount"
 frame_dig -1
-extract 2 0
-concat
-frame_bury 0
-frame_dig 0
-len
+app_local_put
+itxn_begin
+intc_2 // appl
+itxn_field TypeEnum
+frame_dig -2
+itxn_field ApplicationID
+pushbytes 0x2770593c // "hold(uint64)string"
+itxn_field ApplicationArgs
+frame_dig -1
 itob
-extract 6 0
-frame_dig 0
-concat
-frame_bury 0
+itxn_field ApplicationArgs
+itxn_submit
 retsub
 
-// trade
-trade_3:
-proto 1 1
+// complete_trade
+completetrade_3:
+proto 2 1
 bytec_0 // ""
-bytec_1 // "Hello, "
+bytec_1 // "warehouse_id"
+frame_dig -2
+app_global_put
+txn Sender
+bytec_2 // "amount"
 frame_dig -1
-extract 2 0
-concat
-frame_bury 0
-frame_dig 0
-len
+app_local_put
+itxn_begin
+intc_2 // appl
+itxn_field TypeEnum
+frame_dig -2
+itxn_field ApplicationID
+pushbytes 0x7c24c574 // "transfer(uint64)string"
+itxn_field ApplicationArgs
+frame_dig -1
 itob
-extract 6 0
-frame_dig 0
-concat
-frame_bury 0
+itxn_field ApplicationArgs
+itxn_submit
 retsub
+
+// create
+create_4:
+proto 0 0
+intc_0 // 1
+return
+
+// opt_in
+optin_5:
+proto 0 0
+intc_0 // 1
+return
 
 // update_caster
-updatecaster_4:
+updatecaster_6:
 proto 0 0
 callsub update_0
 retsub
 
 // delete_caster
-deletecaster_5:
+deletecaster_7:
 proto 0 0
 callsub delete_1
 retsub
 
-// hello_caster
-hellocaster_6:
+// start_trade_caster
+starttradecaster_8:
 proto 0 0
 bytec_0 // ""
+intc_1 // 0
 dup
 txna ApplicationArgs 1
+btoi
 frame_bury 1
+txna ApplicationArgs 2
+btoi
+frame_bury 2
 frame_dig 1
-callsub hello_2
+frame_dig 2
+callsub starttrade_2
 frame_bury 0
-bytec_2 // 0x151f7c75
+bytec_3 // 0x151f7c75
 frame_dig 0
 concat
 log
 retsub
 
-// trade_caster
-tradecaster_7:
+// complete_trade_caster
+completetradecaster_9:
 proto 0 0
 bytec_0 // ""
+intc_1 // 0
 dup
 txna ApplicationArgs 1
+btoi
 frame_bury 1
+txna ApplicationArgs 2
+btoi
+frame_bury 2
 frame_dig 1
-callsub trade_3
+frame_dig 2
+callsub completetrade_3
 frame_bury 0
-bytec_2 // 0x151f7c75
+bytec_3 // 0x151f7c75
 frame_dig 0
 concat
 log
+retsub
+
+// create_caster
+createcaster_10:
+proto 0 0
+callsub create_4
+retsub
+
+// opt_in_caster
+optincaster_11:
+proto 0 0
+callsub optin_5
 retsub

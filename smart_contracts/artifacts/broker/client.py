@@ -32,38 +32,60 @@ _APP_SPEC_JSON = r"""{
                 "delete_application": "CALL"
             }
         },
-        "hello(string)string": {
+        "start_trade(uint64,uint64)string": {
             "call_config": {
                 "no_op": "CALL"
             }
         },
-        "trade(string)string": {
+        "complete_trade(uint64,uint64)string": {
             "call_config": {
                 "no_op": "CALL"
+            }
+        },
+        "create()void": {
+            "call_config": {
+                "no_op": "CREATE"
+            }
+        },
+        "opt_in()void": {
+            "call_config": {
+                "opt_in": "CALL"
             }
         }
     },
     "source": {
-        "approval": "I3ByYWdtYSB2ZXJzaW9uIDgKaW50Y2Jsb2NrIDAgMQpieXRlY2Jsb2NrIDB4IDB4NDg2NTZjNmM2ZjJjMjAgMHgxNTFmN2M3NQp0eG4gTnVtQXBwQXJncwppbnRjXzAgLy8gMAo9PQpibnogbWFpbl9sMTAKdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMApwdXNoYnl0ZXMgMHhhMGU4MTg3MiAvLyAidXBkYXRlKCl2b2lkIgo9PQpibnogbWFpbl9sOQp0eG5hIEFwcGxpY2F0aW9uQXJncyAwCnB1c2hieXRlcyAweDI0Mzc4ZDNjIC8vICJkZWxldGUoKXZvaWQiCj09CmJueiBtYWluX2w4CnR4bmEgQXBwbGljYXRpb25BcmdzIDAKcHVzaGJ5dGVzIDB4MDJiZWNlMTEgLy8gImhlbGxvKHN0cmluZylzdHJpbmciCj09CmJueiBtYWluX2w3CnR4bmEgQXBwbGljYXRpb25BcmdzIDAKcHVzaGJ5dGVzIDB4YWFmYWIxMDIgLy8gInRyYWRlKHN0cmluZylzdHJpbmciCj09CmJueiBtYWluX2w2CmVycgptYWluX2w2Ogp0eG4gT25Db21wbGV0aW9uCmludGNfMCAvLyBOb09wCj09CnR4biBBcHBsaWNhdGlvbklECmludGNfMCAvLyAwCiE9CiYmCmFzc2VydApjYWxsc3ViIHRyYWRlY2FzdGVyXzcKaW50Y18xIC8vIDEKcmV0dXJuCm1haW5fbDc6CnR4biBPbkNvbXBsZXRpb24KaW50Y18wIC8vIE5vT3AKPT0KdHhuIEFwcGxpY2F0aW9uSUQKaW50Y18wIC8vIDAKIT0KJiYKYXNzZXJ0CmNhbGxzdWIgaGVsbG9jYXN0ZXJfNgppbnRjXzEgLy8gMQpyZXR1cm4KbWFpbl9sODoKdHhuIE9uQ29tcGxldGlvbgpwdXNoaW50IDUgLy8gRGVsZXRlQXBwbGljYXRpb24KPT0KdHhuIEFwcGxpY2F0aW9uSUQKaW50Y18wIC8vIDAKIT0KJiYKYXNzZXJ0CmNhbGxzdWIgZGVsZXRlY2FzdGVyXzUKaW50Y18xIC8vIDEKcmV0dXJuCm1haW5fbDk6CnR4biBPbkNvbXBsZXRpb24KcHVzaGludCA0IC8vIFVwZGF0ZUFwcGxpY2F0aW9uCj09CnR4biBBcHBsaWNhdGlvbklECmludGNfMCAvLyAwCiE9CiYmCmFzc2VydApjYWxsc3ViIHVwZGF0ZWNhc3Rlcl80CmludGNfMSAvLyAxCnJldHVybgptYWluX2wxMDoKdHhuIE9uQ29tcGxldGlvbgppbnRjXzAgLy8gTm9PcAo9PQpibnogbWFpbl9sMTIKZXJyCm1haW5fbDEyOgp0eG4gQXBwbGljYXRpb25JRAppbnRjXzAgLy8gMAo9PQphc3NlcnQKaW50Y18xIC8vIDEKcmV0dXJuCgovLyB1cGRhdGUKdXBkYXRlXzA6CnByb3RvIDAgMAppbnRjXzEgLy8gMQpyZXR1cm4KCi8vIGRlbGV0ZQpkZWxldGVfMToKcHJvdG8gMCAwCmludGNfMSAvLyAxCnJldHVybgoKLy8gaGVsbG8KaGVsbG9fMjoKcHJvdG8gMSAxCmJ5dGVjXzAgLy8gIiIKYnl0ZWNfMSAvLyAiSGVsbG8sICIKZnJhbWVfZGlnIC0xCmV4dHJhY3QgMiAwCmNvbmNhdApmcmFtZV9idXJ5IDAKZnJhbWVfZGlnIDAKbGVuCml0b2IKZXh0cmFjdCA2IDAKZnJhbWVfZGlnIDAKY29uY2F0CmZyYW1lX2J1cnkgMApyZXRzdWIKCi8vIHRyYWRlCnRyYWRlXzM6CnByb3RvIDEgMQpieXRlY18wIC8vICIiCmJ5dGVjXzEgLy8gIkhlbGxvLCAiCmZyYW1lX2RpZyAtMQpleHRyYWN0IDIgMApjb25jYXQKZnJhbWVfYnVyeSAwCmZyYW1lX2RpZyAwCmxlbgppdG9iCmV4dHJhY3QgNiAwCmZyYW1lX2RpZyAwCmNvbmNhdApmcmFtZV9idXJ5IDAKcmV0c3ViCgovLyB1cGRhdGVfY2FzdGVyCnVwZGF0ZWNhc3Rlcl80Ogpwcm90byAwIDAKY2FsbHN1YiB1cGRhdGVfMApyZXRzdWIKCi8vIGRlbGV0ZV9jYXN0ZXIKZGVsZXRlY2FzdGVyXzU6CnByb3RvIDAgMApjYWxsc3ViIGRlbGV0ZV8xCnJldHN1YgoKLy8gaGVsbG9fY2FzdGVyCmhlbGxvY2FzdGVyXzY6CnByb3RvIDAgMApieXRlY18wIC8vICIiCmR1cAp0eG5hIEFwcGxpY2F0aW9uQXJncyAxCmZyYW1lX2J1cnkgMQpmcmFtZV9kaWcgMQpjYWxsc3ViIGhlbGxvXzIKZnJhbWVfYnVyeSAwCmJ5dGVjXzIgLy8gMHgxNTFmN2M3NQpmcmFtZV9kaWcgMApjb25jYXQKbG9nCnJldHN1YgoKLy8gdHJhZGVfY2FzdGVyCnRyYWRlY2FzdGVyXzc6CnByb3RvIDAgMApieXRlY18wIC8vICIiCmR1cAp0eG5hIEFwcGxpY2F0aW9uQXJncyAxCmZyYW1lX2J1cnkgMQpmcmFtZV9kaWcgMQpjYWxsc3ViIHRyYWRlXzMKZnJhbWVfYnVyeSAwCmJ5dGVjXzIgLy8gMHgxNTFmN2M3NQpmcmFtZV9kaWcgMApjb25jYXQKbG9nCnJldHN1Yg==",
+        "approval": "I3ByYWdtYSB2ZXJzaW9uIDgKaW50Y2Jsb2NrIDEgMCA2CmJ5dGVjYmxvY2sgMHggMHg3NzYxNzI2NTY4NmY3NTczNjU1ZjY5NjQgMHg2MTZkNmY3NTZlNzQgMHgxNTFmN2M3NQp0eG5hIEFwcGxpY2F0aW9uQXJncyAwCnB1c2hieXRlcyAweGEwZTgxODcyIC8vICJ1cGRhdGUoKXZvaWQiCj09CmJueiBtYWluX2wxMgp0eG5hIEFwcGxpY2F0aW9uQXJncyAwCnB1c2hieXRlcyAweDI0Mzc4ZDNjIC8vICJkZWxldGUoKXZvaWQiCj09CmJueiBtYWluX2wxMQp0eG5hIEFwcGxpY2F0aW9uQXJncyAwCnB1c2hieXRlcyAweDNmZDI5ZjlhIC8vICJzdGFydF90cmFkZSh1aW50NjQsdWludDY0KXN0cmluZyIKPT0KYm56IG1haW5fbDEwCnR4bmEgQXBwbGljYXRpb25BcmdzIDAKcHVzaGJ5dGVzIDB4ZjE5Yzk2NTEgLy8gImNvbXBsZXRlX3RyYWRlKHVpbnQ2NCx1aW50NjQpc3RyaW5nIgo9PQpibnogbWFpbl9sOQp0eG5hIEFwcGxpY2F0aW9uQXJncyAwCnB1c2hieXRlcyAweDRjNWM2MWJhIC8vICJjcmVhdGUoKXZvaWQiCj09CmJueiBtYWluX2w4CnR4bmEgQXBwbGljYXRpb25BcmdzIDAKcHVzaGJ5dGVzIDB4MzBjNmQ1OGEgLy8gIm9wdF9pbigpdm9pZCIKPT0KYm56IG1haW5fbDcKZXJyCm1haW5fbDc6CnR4biBPbkNvbXBsZXRpb24KaW50Y18wIC8vIE9wdEluCj09CnR4biBBcHBsaWNhdGlvbklECmludGNfMSAvLyAwCiE9CiYmCmFzc2VydApjYWxsc3ViIG9wdGluY2FzdGVyXzExCmludGNfMCAvLyAxCnJldHVybgptYWluX2w4Ogp0eG4gT25Db21wbGV0aW9uCmludGNfMSAvLyBOb09wCj09CnR4biBBcHBsaWNhdGlvbklECmludGNfMSAvLyAwCj09CiYmCmFzc2VydApjYWxsc3ViIGNyZWF0ZWNhc3Rlcl8xMAppbnRjXzAgLy8gMQpyZXR1cm4KbWFpbl9sOToKdHhuIE9uQ29tcGxldGlvbgppbnRjXzEgLy8gTm9PcAo9PQp0eG4gQXBwbGljYXRpb25JRAppbnRjXzEgLy8gMAohPQomJgphc3NlcnQKY2FsbHN1YiBjb21wbGV0ZXRyYWRlY2FzdGVyXzkKaW50Y18wIC8vIDEKcmV0dXJuCm1haW5fbDEwOgp0eG4gT25Db21wbGV0aW9uCmludGNfMSAvLyBOb09wCj09CnR4biBBcHBsaWNhdGlvbklECmludGNfMSAvLyAwCiE9CiYmCmFzc2VydApjYWxsc3ViIHN0YXJ0dHJhZGVjYXN0ZXJfOAppbnRjXzAgLy8gMQpyZXR1cm4KbWFpbl9sMTE6CnR4biBPbkNvbXBsZXRpb24KcHVzaGludCA1IC8vIERlbGV0ZUFwcGxpY2F0aW9uCj09CnR4biBBcHBsaWNhdGlvbklECmludGNfMSAvLyAwCiE9CiYmCmFzc2VydApjYWxsc3ViIGRlbGV0ZWNhc3Rlcl83CmludGNfMCAvLyAxCnJldHVybgptYWluX2wxMjoKdHhuIE9uQ29tcGxldGlvbgpwdXNoaW50IDQgLy8gVXBkYXRlQXBwbGljYXRpb24KPT0KdHhuIEFwcGxpY2F0aW9uSUQKaW50Y18xIC8vIDAKIT0KJiYKYXNzZXJ0CmNhbGxzdWIgdXBkYXRlY2FzdGVyXzYKaW50Y18wIC8vIDEKcmV0dXJuCgovLyB1cGRhdGUKdXBkYXRlXzA6CnByb3RvIDAgMAppbnRjXzAgLy8gMQpyZXR1cm4KCi8vIGRlbGV0ZQpkZWxldGVfMToKcHJvdG8gMCAwCmludGNfMCAvLyAxCnJldHVybgoKLy8gc3RhcnRfdHJhZGUKc3RhcnR0cmFkZV8yOgpwcm90byAyIDEKYnl0ZWNfMCAvLyAiIgpieXRlY18xIC8vICJ3YXJlaG91c2VfaWQiCmZyYW1lX2RpZyAtMgphcHBfZ2xvYmFsX3B1dAp0eG4gU2VuZGVyCmJ5dGVjXzIgLy8gImFtb3VudCIKZnJhbWVfZGlnIC0xCmFwcF9sb2NhbF9wdXQKaXR4bl9iZWdpbgppbnRjXzIgLy8gYXBwbAppdHhuX2ZpZWxkIFR5cGVFbnVtCmZyYW1lX2RpZyAtMgppdHhuX2ZpZWxkIEFwcGxpY2F0aW9uSUQKcHVzaGJ5dGVzIDB4Mjc3MDU5M2MgLy8gImhvbGQodWludDY0KXN0cmluZyIKaXR4bl9maWVsZCBBcHBsaWNhdGlvbkFyZ3MKZnJhbWVfZGlnIC0xCml0b2IKaXR4bl9maWVsZCBBcHBsaWNhdGlvbkFyZ3MKaXR4bl9zdWJtaXQKcmV0c3ViCgovLyBjb21wbGV0ZV90cmFkZQpjb21wbGV0ZXRyYWRlXzM6CnByb3RvIDIgMQpieXRlY18wIC8vICIiCmJ5dGVjXzEgLy8gIndhcmVob3VzZV9pZCIKZnJhbWVfZGlnIC0yCmFwcF9nbG9iYWxfcHV0CnR4biBTZW5kZXIKYnl0ZWNfMiAvLyAiYW1vdW50IgpmcmFtZV9kaWcgLTEKYXBwX2xvY2FsX3B1dAppdHhuX2JlZ2luCmludGNfMiAvLyBhcHBsCml0eG5fZmllbGQgVHlwZUVudW0KZnJhbWVfZGlnIC0yCml0eG5fZmllbGQgQXBwbGljYXRpb25JRApwdXNoYnl0ZXMgMHg3YzI0YzU3NCAvLyAidHJhbnNmZXIodWludDY0KXN0cmluZyIKaXR4bl9maWVsZCBBcHBsaWNhdGlvbkFyZ3MKZnJhbWVfZGlnIC0xCml0b2IKaXR4bl9maWVsZCBBcHBsaWNhdGlvbkFyZ3MKaXR4bl9zdWJtaXQKcmV0c3ViCgovLyBjcmVhdGUKY3JlYXRlXzQ6CnByb3RvIDAgMAppbnRjXzAgLy8gMQpyZXR1cm4KCi8vIG9wdF9pbgpvcHRpbl81Ogpwcm90byAwIDAKaW50Y18wIC8vIDEKcmV0dXJuCgovLyB1cGRhdGVfY2FzdGVyCnVwZGF0ZWNhc3Rlcl82Ogpwcm90byAwIDAKY2FsbHN1YiB1cGRhdGVfMApyZXRzdWIKCi8vIGRlbGV0ZV9jYXN0ZXIKZGVsZXRlY2FzdGVyXzc6CnByb3RvIDAgMApjYWxsc3ViIGRlbGV0ZV8xCnJldHN1YgoKLy8gc3RhcnRfdHJhZGVfY2FzdGVyCnN0YXJ0dHJhZGVjYXN0ZXJfODoKcHJvdG8gMCAwCmJ5dGVjXzAgLy8gIiIKaW50Y18xIC8vIDAKZHVwCnR4bmEgQXBwbGljYXRpb25BcmdzIDEKYnRvaQpmcmFtZV9idXJ5IDEKdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMgpidG9pCmZyYW1lX2J1cnkgMgpmcmFtZV9kaWcgMQpmcmFtZV9kaWcgMgpjYWxsc3ViIHN0YXJ0dHJhZGVfMgpmcmFtZV9idXJ5IDAKYnl0ZWNfMyAvLyAweDE1MWY3Yzc1CmZyYW1lX2RpZyAwCmNvbmNhdApsb2cKcmV0c3ViCgovLyBjb21wbGV0ZV90cmFkZV9jYXN0ZXIKY29tcGxldGV0cmFkZWNhc3Rlcl85Ogpwcm90byAwIDAKYnl0ZWNfMCAvLyAiIgppbnRjXzEgLy8gMApkdXAKdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMQpidG9pCmZyYW1lX2J1cnkgMQp0eG5hIEFwcGxpY2F0aW9uQXJncyAyCmJ0b2kKZnJhbWVfYnVyeSAyCmZyYW1lX2RpZyAxCmZyYW1lX2RpZyAyCmNhbGxzdWIgY29tcGxldGV0cmFkZV8zCmZyYW1lX2J1cnkgMApieXRlY18zIC8vIDB4MTUxZjdjNzUKZnJhbWVfZGlnIDAKY29uY2F0CmxvZwpyZXRzdWIKCi8vIGNyZWF0ZV9jYXN0ZXIKY3JlYXRlY2FzdGVyXzEwOgpwcm90byAwIDAKY2FsbHN1YiBjcmVhdGVfNApyZXRzdWIKCi8vIG9wdF9pbl9jYXN0ZXIKb3B0aW5jYXN0ZXJfMTE6CnByb3RvIDAgMApjYWxsc3ViIG9wdGluXzUKcmV0c3Vi",
         "clear": "I3ByYWdtYSB2ZXJzaW9uIDgKcHVzaGludCAwIC8vIDAKcmV0dXJu"
     },
     "state": {
         "global": {
             "num_byte_slices": 0,
-            "num_uints": 0
+            "num_uints": 1
         },
         "local": {
             "num_byte_slices": 0,
-            "num_uints": 0
+            "num_uints": 1
         }
     },
     "schema": {
         "global": {
-            "declared": {},
+            "declared": {
+                "warehouse_id": {
+                    "type": "uint64",
+                    "key": "warehouse_id",
+                    "descr": "Warehouse Id"
+                }
+            },
             "reserved": {}
         },
         "local": {
-            "declared": {},
+            "declared": {
+                "amount": {
+                    "type": "uint64",
+                    "key": "amount",
+                    "descr": "Trade Amount"
+                }
+            },
             "reserved": {}
         }
     },
@@ -85,11 +107,15 @@ _APP_SPEC_JSON = r"""{
                 }
             },
             {
-                "name": "hello",
+                "name": "start_trade",
                 "args": [
                     {
-                        "type": "string",
-                        "name": "name"
+                        "type": "uint64",
+                        "name": "warehouse_id"
+                    },
+                    {
+                        "type": "uint64",
+                        "name": "amount"
                     }
                 ],
                 "returns": {
@@ -97,23 +123,39 @@ _APP_SPEC_JSON = r"""{
                 }
             },
             {
-                "name": "trade",
+                "name": "complete_trade",
                 "args": [
                     {
-                        "type": "string",
-                        "name": "name"
+                        "type": "uint64",
+                        "name": "warehouse_id"
+                    },
+                    {
+                        "type": "uint64",
+                        "name": "amount"
                     }
                 ],
                 "returns": {
                     "type": "string"
                 }
+            },
+            {
+                "name": "create",
+                "args": [],
+                "returns": {
+                    "type": "void"
+                }
+            },
+            {
+                "name": "opt_in",
+                "args": [],
+                "returns": {
+                    "type": "void"
+                }
             }
         ],
         "networks": {}
     },
-    "bare_call_config": {
-        "no_op": "CREATE"
-    }
+    "bare_call_config": {}
 }"""
 APP_SPEC = algokit_utils.ApplicationSpecification.from_json(_APP_SPEC_JSON)
 _TReturn = typing.TypeVar("_TReturn")
@@ -132,6 +174,11 @@ _TArgs = typing.TypeVar("_TArgs", bound=_ArgsBase[typing.Any])
 @dataclasses.dataclass(kw_only=True)
 class _TArgsHolder(typing.Generic[_TArgs]):
     args: _TArgs
+
+
+@dataclasses.dataclass(kw_only=True)
+class DeployCreate(algokit_utils.DeployCreateCallArgs, _TArgsHolder[_TArgs], typing.Generic[_TArgs]):
+    pass
 
 
 @dataclasses.dataclass(kw_only=True)
@@ -194,21 +241,30 @@ def _convert_deploy_args(
 
 
 @dataclasses.dataclass(kw_only=True)
-class HelloArgs(_ArgsBase[str]):
-    name: str
+class StartTradeArgs(_ArgsBase[str]):
+    warehouse_id: int
+    amount: int
 
     @staticmethod
     def method() -> str:
-        return "hello(string)string"
+        return "start_trade(uint64,uint64)string"
 
 
 @dataclasses.dataclass(kw_only=True)
-class TradeArgs(_ArgsBase[str]):
-    name: str
+class CompleteTradeArgs(_ArgsBase[str]):
+    warehouse_id: int
+    amount: int
 
     @staticmethod
     def method() -> str:
-        return "trade(string)string"
+        return "complete_trade(uint64,uint64)string"
+
+
+@dataclasses.dataclass(kw_only=True)
+class CreateArgs(_ArgsBase[None]):
+    @staticmethod
+    def method() -> str:
+        return "create()void"
 
 
 @dataclasses.dataclass(kw_only=True)
@@ -223,6 +279,25 @@ class DeleteArgs(_ArgsBase[None]):
     @staticmethod
     def method() -> str:
         return "delete()void"
+
+
+@dataclasses.dataclass(kw_only=True)
+class OptInArgs(_ArgsBase[None]):
+    @staticmethod
+    def method() -> str:
+        return "opt_in()void"
+
+
+class GlobalState:
+    def __init__(self, data: dict[bytes, bytes | int]):
+        self.warehouse_id = typing.cast(int, data.get(b"warehouse_id"))
+        """Warehouse Id"""
+
+
+class LocalState:
+    def __init__(self, data: dict[bytes, bytes | int]):
+        self.amount = typing.cast(int, data.get(b"amount"))
+        """Trade Amount"""
 
 
 class Composer:
@@ -241,20 +316,23 @@ class Composer:
     def execute(self) -> AtomicTransactionResponse:
         return self.app_client.execute_atc(self.atc)
 
-    def hello(
+    def start_trade(
         self,
         *,
-        name: str,
+        warehouse_id: int,
+        amount: int,
         transaction_parameters: algokit_utils.TransactionParameters | None = None,
     ) -> "Composer":
-        """Adds a call to `hello(string)string` ABI method
+        """Adds a call to `start_trade(uint64,uint64)string` ABI method
         
-        :param str name: The `name` ABI parameter
+        :param int warehouse_id: The `warehouse_id` ABI parameter
+        :param int amount: The `amount` ABI parameter
         :param algokit_utils.TransactionParameters transaction_parameters: (optional) Additional transaction parameters
         :returns Composer: This Composer instance"""
 
-        args = HelloArgs(
-            name=name,
+        args = StartTradeArgs(
+            warehouse_id=warehouse_id,
+            amount=amount,
         )
         self.app_client.compose_call(
             self.atc,
@@ -264,20 +342,23 @@ class Composer:
         )
         return self
 
-    def trade(
+    def complete_trade(
         self,
         *,
-        name: str,
+        warehouse_id: int,
+        amount: int,
         transaction_parameters: algokit_utils.TransactionParameters | None = None,
     ) -> "Composer":
-        """Adds a call to `trade(string)string` ABI method
+        """Adds a call to `complete_trade(uint64,uint64)string` ABI method
         
-        :param str name: The `name` ABI parameter
+        :param int warehouse_id: The `warehouse_id` ABI parameter
+        :param int amount: The `amount` ABI parameter
         :param algokit_utils.TransactionParameters transaction_parameters: (optional) Additional transaction parameters
         :returns Composer: This Composer instance"""
 
-        args = TradeArgs(
-            name=name,
+        args = CompleteTradeArgs(
+            warehouse_id=warehouse_id,
+            amount=amount,
         )
         self.app_client.compose_call(
             self.atc,
@@ -287,22 +368,24 @@ class Composer:
         )
         return self
 
-    def create_bare(
+    def create_create(
         self,
         *,
         on_complete: typing.Literal["no_op"] = "no_op",
         transaction_parameters: algokit_utils.CreateTransactionParameters | None = None,
     ) -> "Composer":
-        """Adds a call to create an application using the no_op bare method
+        """Adds a call to `create()void` ABI method
         
         :param typing.Literal[no_op] on_complete: On completion type to use
         :param algokit_utils.CreateTransactionParameters transaction_parameters: (optional) Additional transaction parameters
         :returns Composer: This Composer instance"""
 
+        args = CreateArgs()
         self.app_client.compose_create(
             self.atc,
-            call_abi_method=False,
+            call_abi_method=args.method(),
             transaction_parameters=_convert_create_transaction_parameters(transaction_parameters, on_complete),
+            **_as_dict(args, convert_all=True),
         )
         return self
 
@@ -337,6 +420,25 @@ class Composer:
 
         args = DeleteArgs()
         self.app_client.compose_delete(
+            self.atc,
+            call_abi_method=args.method(),
+            transaction_parameters=_convert_transaction_parameters(transaction_parameters),
+            **_as_dict(args, convert_all=True),
+        )
+        return self
+
+    def opt_in_opt_in(
+        self,
+        *,
+        transaction_parameters: algokit_utils.TransactionParameters | None = None,
+    ) -> "Composer":
+        """Adds a call to `opt_in()void` ABI method
+        
+        :param algokit_utils.TransactionParameters transaction_parameters: (optional) Additional transaction parameters
+        :returns Composer: This Composer instance"""
+
+        args = OptInArgs()
+        self.app_client.compose_opt_in(
             self.atc,
             call_abi_method=args.method(),
             transaction_parameters=_convert_transaction_parameters(transaction_parameters),
@@ -484,20 +586,35 @@ class BrokerClient:
     def suggested_params(self, value: algosdk.transaction.SuggestedParams | None) -> None:
         self.app_client.suggested_params = value
 
-    def hello(
+    def get_global_state(self) -> GlobalState:
+        """Returns the application's global state wrapped in a strongly typed class with options to format the stored value"""
+
+        state = typing.cast(dict[bytes, bytes | int], self.app_client.get_global_state(raw=True))
+        return GlobalState(state)
+
+    def get_local_state(self, account: str | None = None) -> LocalState:
+        """Returns the application's local state wrapped in a strongly typed class with options to format the stored value"""
+
+        state = typing.cast(dict[bytes, bytes | int], self.app_client.get_local_state(account, raw=True))
+        return LocalState(state)
+
+    def start_trade(
         self,
         *,
-        name: str,
+        warehouse_id: int,
+        amount: int,
         transaction_parameters: algokit_utils.TransactionParameters | None = None,
     ) -> algokit_utils.ABITransactionResponse[str]:
-        """Calls `hello(string)string` ABI method
+        """Calls `start_trade(uint64,uint64)string` ABI method
         
-        :param str name: The `name` ABI parameter
+        :param int warehouse_id: The `warehouse_id` ABI parameter
+        :param int amount: The `amount` ABI parameter
         :param algokit_utils.TransactionParameters transaction_parameters: (optional) Additional transaction parameters
         :returns algokit_utils.ABITransactionResponse[str]: The result of the transaction"""
 
-        args = HelloArgs(
-            name=name,
+        args = StartTradeArgs(
+            warehouse_id=warehouse_id,
+            amount=amount,
         )
         result = self.app_client.call(
             call_abi_method=args.method(),
@@ -506,20 +623,23 @@ class BrokerClient:
         )
         return result
 
-    def trade(
+    def complete_trade(
         self,
         *,
-        name: str,
+        warehouse_id: int,
+        amount: int,
         transaction_parameters: algokit_utils.TransactionParameters | None = None,
     ) -> algokit_utils.ABITransactionResponse[str]:
-        """Calls `trade(string)string` ABI method
+        """Calls `complete_trade(uint64,uint64)string` ABI method
         
-        :param str name: The `name` ABI parameter
+        :param int warehouse_id: The `warehouse_id` ABI parameter
+        :param int amount: The `amount` ABI parameter
         :param algokit_utils.TransactionParameters transaction_parameters: (optional) Additional transaction parameters
         :returns algokit_utils.ABITransactionResponse[str]: The result of the transaction"""
 
-        args = TradeArgs(
-            name=name,
+        args = CompleteTradeArgs(
+            warehouse_id=warehouse_id,
+            amount=amount,
         )
         result = self.app_client.call(
             call_abi_method=args.method(),
@@ -528,21 +648,23 @@ class BrokerClient:
         )
         return result
 
-    def create_bare(
+    def create_create(
         self,
         *,
         on_complete: typing.Literal["no_op"] = "no_op",
         transaction_parameters: algokit_utils.CreateTransactionParameters | None = None,
-    ) -> algokit_utils.TransactionResponse:
-        """Creates an application using the no_op bare method
+    ) -> algokit_utils.ABITransactionResponse[None]:
+        """Calls `create()void` ABI method
         
         :param typing.Literal[no_op] on_complete: On completion type to use
         :param algokit_utils.CreateTransactionParameters transaction_parameters: (optional) Additional transaction parameters
-        :returns algokit_utils.TransactionResponse: The result of the transaction"""
+        :returns algokit_utils.ABITransactionResponse[None]: The result of the transaction"""
 
+        args = CreateArgs()
         result = self.app_client.create(
-            call_abi_method=False,
+            call_abi_method=args.method(),
             transaction_parameters=_convert_create_transaction_parameters(transaction_parameters, on_complete),
+            **_as_dict(args, convert_all=True),
         )
         return result
 
@@ -582,6 +704,24 @@ class BrokerClient:
         )
         return result
 
+    def opt_in_opt_in(
+        self,
+        *,
+        transaction_parameters: algokit_utils.TransactionParameters | None = None,
+    ) -> algokit_utils.ABITransactionResponse[None]:
+        """Calls `opt_in()void` ABI method
+        
+        :param algokit_utils.TransactionParameters transaction_parameters: (optional) Additional transaction parameters
+        :returns algokit_utils.ABITransactionResponse[None]: The result of the transaction"""
+
+        args = OptInArgs()
+        result = self.app_client.opt_in(
+            call_abi_method=args.method(),
+            transaction_parameters=_convert_transaction_parameters(transaction_parameters),
+            **_as_dict(args, convert_all=True),
+        )
+        return result
+
     def clear_state(
         self,
         transaction_parameters: algokit_utils.TransactionParameters | None = None,
@@ -606,7 +746,7 @@ class BrokerClient:
         on_update: algokit_utils.OnUpdate = algokit_utils.OnUpdate.Fail,
         on_schema_break: algokit_utils.OnSchemaBreak = algokit_utils.OnSchemaBreak.Fail,
         template_values: algokit_utils.TemplateValueMapping | None = None,
-        create_args: algokit_utils.DeployCallArgs | None = None,
+        create_args: DeployCreate[CreateArgs],
         update_args: Deploy[UpdateArgs],
         delete_args: Deploy[DeleteArgs],
     ) -> algokit_utils.DeployResponse:
@@ -640,7 +780,7 @@ class BrokerClient:
         has increased beyond the current allocation
         :param dict[str, int|str|bytes] template_values: Values to use for `TMPL_*` template variables, dictionary keys
         should *NOT* include the TMPL_ prefix
-        :param algokit_utils.DeployCallArgs | None create_args: Arguments used when creating an application
+        :param DeployCreate[CreateArgs] create_args: Arguments used when creating an application
         :param Deploy[UpdateArgs] update_args: Arguments used when updating an application
         :param Deploy[DeleteArgs] delete_args: Arguments used when deleting an application
         :return DeployResponse: details action taken and relevant transactions

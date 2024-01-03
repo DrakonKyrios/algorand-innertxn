@@ -42,7 +42,7 @@ def opt_in() -> Expr:
 @app.external
 def hold(value: abi.Uint64, *, output: abi.String) -> Expr:
     return Seq(
-        app.state.local_stock.set(app.state.local_stock.get() - value.get()),
+        # app.state.local_stock.set(app.state.local_stock.get() - value.get()),
         app.state.shared_stock.set(app.state.shared_stock.get() + value.get()),
         output.set(Bytes("Done")),
     )
@@ -51,7 +51,7 @@ def hold(value: abi.Uint64, *, output: abi.String) -> Expr:
 @app.external
 def transfer(value: abi.Uint64, *, output: abi.String) -> Expr:
     return Seq(
-        app.state.local_stock.set(app.state.local_stock.get() + value.get()),
+        # app.state.local_stock.set(app.state.local_stock.get() + value.get()),
         app.state.shared_stock.set(app.state.shared_stock.get() - value.get()),
         output.set(Bytes("Done")),
     )

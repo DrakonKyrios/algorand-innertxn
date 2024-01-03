@@ -16,11 +16,15 @@
             }
         },
         {
-            "name": "hello",
+            "name": "start_trade",
             "args": [
                 {
-                    "type": "string",
-                    "name": "name"
+                    "type": "uint64",
+                    "name": "warehouse_id"
+                },
+                {
+                    "type": "uint64",
+                    "name": "amount"
                 }
             ],
             "returns": {
@@ -28,15 +32,33 @@
             }
         },
         {
-            "name": "trade",
+            "name": "complete_trade",
             "args": [
                 {
-                    "type": "string",
-                    "name": "name"
+                    "type": "uint64",
+                    "name": "warehouse_id"
+                },
+                {
+                    "type": "uint64",
+                    "name": "amount"
                 }
             ],
             "returns": {
                 "type": "string"
+            }
+        },
+        {
+            "name": "create",
+            "args": [],
+            "returns": {
+                "type": "void"
+            }
+        },
+        {
+            "name": "opt_in",
+            "args": [],
+            "returns": {
+                "type": "void"
             }
         }
     ],
