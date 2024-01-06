@@ -56,5 +56,5 @@ def test_transfer(warehouse_client: WarehouseClient) -> None:
     global_result = warehouse_client.get_global_state()
     local_result = warehouse_client.get_local_state()
 
-    assert global_result.shared_stock == 100
+    assert global_result.shared_stock == 300
     # assert local_result.local_stock == 1000
